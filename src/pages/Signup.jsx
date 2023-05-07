@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import "./Styling/Signup.css";
 import logo from "../icons/WeSkiiLogo.png";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth ,db} from "../firebase";
+import { auth, db } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { Button, TextField } from "@mui/material";
-import { collection, addDoc,doc } from "firebase/firestore";
+import { collection, addDoc, doc } from "firebase/firestore";
 const Signup = () => {
   const navigate = useNavigate();
 
@@ -25,14 +25,12 @@ const Signup = () => {
     // e.preventDefault()
     console.log(username);
     console.log(password);
-    const collectionRef = collection(db,"Shipping info")
+    const collectionRef = collection(db, "Shipping info");
     await createUserWithEmailAndPassword(auth, username, password)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
         console.log(user);
-       
-     
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -41,29 +39,28 @@ const Signup = () => {
         alert(errorMessage);
       });
 
-      // add to the  shipping database 
-      
-      await addDoc(collectionRef,{
-        firstName: firstName, lastName:lastName,
-        address:address, city:city,state:state,zip:zip,
-        email:auth.currentUser.email, id:auth.currentUser.uid
-      }
+    // add to the  shipping database
 
+    await addDoc(collectionRef, {
+      firstName: firstName,
+      lastName: lastName,
+      address: address,
+      city: city,
+      state: state,
+      zip: zip,
+      email: auth.currentUser.email,
+      id: auth.currentUser.uid,
+    })
+      .then(() => {
+        navigate("/login");
+      })
 
-     ).then(()=>{
-
-      navigate("/login")
-     })
-
-     .catch((error) =>{
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorCode, errorMessage);
-     })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
   };
-
-
-
 
   return (
     <div className="form-wrapper">
