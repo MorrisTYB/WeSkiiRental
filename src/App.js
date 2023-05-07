@@ -9,10 +9,15 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ShopContextProvider } from './context/ShopContext';
 import NotFound from './pages/NotFound';
 import Success from './pages/Success';
+import { Helmet } from 'react-helmet';
 
 function App() {
   return (
     <div>
+    <Helmet>
+    <title> We Skii Rental </title>
+
+    </Helmet>
       <ShopContextProvider>
         <BrowserRouter>
           <Navbar />
