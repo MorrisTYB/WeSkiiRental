@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { TextField, Button } from "@mui/material";
 import "./Styling/LoginForm.css";
 import { useNavigate } from "react-router-dom";
 import "./Styling/Account.css";
+import { collection, getDocs,doc,query,where } from "firebase/firestore";
+// db
+import {auth,db} from '../firebase';
 // import {  createUserWithEmailAndPassword  } from 'firebase/auth';
 // import {auth} from '../firebase';
 
@@ -12,7 +15,7 @@ const Account = () => {
   const password = sessionStorage.getItem("password");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-
+ 
   const handlePasswordSubmit = (event) => {
     event.preventDefault();
     if (password === oldPassword) {
@@ -22,7 +25,34 @@ const Account = () => {
       alert("Password Incorrect");
     }
   };
+  useEffect(() => {
 
+    console.log("in use effect")
+ const getShipping = async() =>{
+  const collectionRef = query(collection(db, "Shipping info"), where("id", "==", auth.currentUser.uid));
+   
+   const data = await getDocs(collectionRef);
+   
+    
+    const data1= data.docs.map((doc)=>({ ...doc.data(), id:doc.id
+     })
+    )
+     console.log(data1[0]);
+   
+     // data
+     sessionStorage.setItem("firstName",data1[0].firstName );
+     sessionStorage.setItem("lastName",data1[0].lastName );
+     sessionStorage.setItem("city",data1[0].city );
+     sessionStorage.setItem("address",data1[0].address );
+     sessionStorage.setItem("state",data1[0].state );
+     sessionStorage.setItem("zip",data1[0].zip );
+   }
+   
+   
+   getShipping().catch(console.error);
+   
+   }, [])
+   
   const errorPasswordIncorrect = () => {
     alert("Password Incorrect");
   };
