@@ -41,7 +41,6 @@ const add_order = async(orderID,trackingNumber) => {
         , priceRent: 50.99
         , NumberOrdered: 2
       }
-      ,ndx: sessionStorage.getCartItems("item")
     }
     );
 }
